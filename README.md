@@ -13,9 +13,11 @@ Minimal public reproductions for HyperFrames issues.
 
 Four 3s scenes reuse `assets/long-take.mp4` (90s) at `data-media-start` 5 / 25 / 50 / 70.
 
-**Expected (fixed):** each video window stays ~3s (scene slot). Extract cost is small.
+Videos intentionally omit `data-duration`. Compile fills natural remaining source length into the DOM; `parseSubCompositions` clamps `composition.videos` to each 3s scene slot. Unpatched `probeStage` then extends each `end` back toward the natural window.
 
-**Actual (unpatched `main`):** `probeStage` replaces each compile-time `end` with a browser projection based on full source duration. Extract windows inflate toward remaining source length. Deep scenes can blow past ffmpeg timeouts and ship black while the render still succeeds.
+**Expected (fixed):** `maxFramesPerVideo` ≈ 90 (3s × 30fps). Extract cost stays scene-sized.
+
+**Actual (unpatched `main`):** `maxFramesPerVideo` jumps to hundreds (remaining source after each media-start). Deep scenes do far more extract work than the slot needs; under ffmpeg timeouts they can ship black while the render still succeeds.
 
 ### Reproduce
 
@@ -24,6 +26,6 @@ git checkout patch/clamp-embedded-media
 npm run render -- --debug
 ```
 
-Then inspect producer debug artifacts / logs for per-video extract duration or frame counts. Inflated windows look like tens of seconds (or more) per short scene, not ~3s.
+Watch the `video_extract` checkpoint for `maxFramesPerVideo` / `avgFramesPerExtractedVideo`. Inflated = bug. ~90 = fixed.
 
-`compositions/force-probe.html` is an empty unresolved overlay so the browser probe runs. Without it, known-duration static media can skip the reconcile path that has the bug.
+`compositions/force-probe.html` is an empty unresolved overlay so the browser probe runs.

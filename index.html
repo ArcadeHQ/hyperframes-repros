@@ -29,12 +29,11 @@
   <body>
     <!--
       Repro: four short scene slots reuse one 90s take at deep media-starts.
-      probeStage must keep each video's compile-time end (scene window).
-      Unpatched main extends end toward full source duration → huge extracts;
-      deep scenes can time out black on constrained runners.
+      Videos omit data-duration so ffprobe fills natural remaining length in the
+      DOM; parseSubCompositions clamps composition.videos to each 3s slot;
+      unpatched probeStage extends end back to the natural window.
 
-      force-probe has no data-duration so the browser probe runs (otherwise
-      known-duration static media skips the reconcile path that has the bug).
+      force-probe has no data-duration so the browser probe runs.
     -->
     <div
       id="root"
@@ -51,6 +50,7 @@
         data-start="0"
         data-duration="3"
         data-track-index="0"
+        data-no-timeline
       ></div>
       <div
         id="scene-b-host"
@@ -59,6 +59,7 @@
         data-start="3"
         data-duration="3"
         data-track-index="0"
+        data-no-timeline
       ></div>
       <div
         id="scene-c-host"
@@ -67,6 +68,7 @@
         data-start="6"
         data-duration="3"
         data-track-index="0"
+        data-no-timeline
       ></div>
       <div
         id="scene-d-host"
@@ -75,6 +77,7 @@
         data-start="9"
         data-duration="3"
         data-track-index="0"
+        data-no-timeline
       ></div>
       <div
         id="force-probe-host"
