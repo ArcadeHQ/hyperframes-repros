@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Host omits data-duration → unresolved composition → browser probe runs.
+      Empty overlay; exists only to enter the media-reconcile path.
+    -->
+    <div
+      id="force-probe"
+      data-composition-id="force-probe"
+      data-width="1920"
+      data-height="1080"
+    >
+      <script>
+        window.__timelines = window.__timelines || {};
+        window.__timelines["force-probe"] = gsap.timeline({ paused: true }).to({}, { duration: 12 });
+      </script>
+    </div>
+  </body>
+</html>

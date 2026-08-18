@@ -16,44 +16,78 @@
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        background: #000;
+        background: #111;
       }
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      [data-composition-src] {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
       }
     </style>
   </head>
   <body>
+    <!--
+      Repro: four short scene slots reuse one 90s take at deep media-starts.
+      probeStage must keep each video's compile-time end (scene window).
+      Unpatched main extends end toward full source duration → huge extracts;
+      deep scenes can time out black on constrained runners.
+
+      force-probe has no data-duration so the browser probe runs (otherwise
+      known-duration static media skips the reconcile path that has the bug).
+    -->
     <div
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="12"
       data-width="1920"
       data-height="1080"
     >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <div
+        id="scene-a-host"
+        data-composition-id="scene-a"
+        data-composition-src="compositions/scene-a.html"
+        data-start="0"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-b-host"
+        data-composition-id="scene-b"
+        data-composition-src="compositions/scene-b.html"
+        data-start="3"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-c-host"
+        data-composition-id="scene-c"
+        data-composition-src="compositions/scene-c.html"
+        data-start="6"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-d-host"
+        data-composition-id="scene-d"
+        data-composition-src="compositions/scene-d.html"
+        data-start="9"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
+      <div
+        id="force-probe-host"
+        data-composition-id="force-probe"
+        data-composition-src="compositions/force-probe.html"
+        data-start="0"
+        data-track-index="9"
+      ></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+      window.__timelines["main"] = gsap.timeline({ paused: true });
     </script>
   </body>
 </html>
