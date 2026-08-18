@@ -41,13 +41,14 @@
       data-no-timeline
     >
       <!--
-        Bare video (no data-start / data-duration): compile injects
-        data-hf-auto-start (probe) and ffprobe fills natural remaining length.
+        data-start present (lint-clean). No data-duration: ffprobe fills natural
+        remaining source length into the DOM.
       -->
       <video
         id="cut-a"
         class="clip"
         src="assets/long-take.mp4"
+        data-start="0"
         data-media-start="5"
         data-track-index="0"
         muted

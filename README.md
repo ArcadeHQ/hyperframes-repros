@@ -11,11 +11,13 @@ Minimal public reproductions for HyperFrames issues.
 
 ## `patch/clamp-embedded-media`
 
-Shaped like Arcade wizard comps: nested scenes with stamped host `data-duration`, one long take sliced via `data-media-start`, bare in-scene `<video>` (no `data-start` / `data-duration`).
+Four 3s nested scenes reuse `assets/long-take.mp4` (90s) at `data-media-start` 5 / 25 / 50 / 70.
 
-Four 3s scenes reuse `assets/long-take.mp4` (90s) at `data-media-start` 5 / 25 / 50 / 70.
+- Scene hosts stamp `data-duration="3"`.
+- Videos set `data-start="0"` and omit `data-duration`, so ffprobe fills natural remaining source length into the DOM.
+- Root omits `data-duration`; length comes from the GSAP master timeline (12s). That launches the browser probe.
 
-Compile injects `data-hf-auto-start` (so the browser probe runs for visibility). ffprobe fills natural remaining source length into the DOM; `parseSubCompositions` clamps `composition.videos` to each 3s scene slot. Unpatched `probeStage` then extends each `end` back toward the natural window.
+`parseSubCompositions` clamps `composition.videos` to each 3s scene slot. Unpatched `probeStage` then extends each `end` back toward the natural window.
 
 **Expected (fixed):** `maxFramesPerVideo` ≈ 90 (3s × 30fps). Extract cost stays scene-sized.
 
@@ -25,9 +27,8 @@ Compile injects `data-hf-auto-start` (so the browser probe runs for visibility).
 
 ```bash
 git checkout patch/clamp-embedded-media
+npx hyperframes lint   # should be clean
 npm run render -- --debug
 ```
 
-Watch for `Launching browser for composition probe...` with reason `auto-start video(s)`, then the `video_extract` checkpoint for `maxFramesPerVideo`. Inflated = bug. ~90 = fixed.
-
-`npx hyperframes lint` reports `media_missing_data_start` on the four videos. That is intentional: bare media is how compile injects `data-hf-auto-start` and enters the probe path Arcade hits. Default `render` continues despite those lint errors; use `--strict` only if you want lint to block.
+Watch for `Launching browser for composition probe...` (root duration unknown), then the `video_extract` checkpoint for `maxFramesPerVideo`. Inflated = bug. ~90 = fixed.

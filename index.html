@@ -28,21 +28,18 @@
   </head>
   <body>
     <!--
-      Repro shaped like Arcade wizard comps:
-      - nested scenes with stamped host data-duration
-      - one long take sliced via data-media-start
-      - bare in-scene <video> (no data-start, no data-duration)
+      Nested scenes with stamped host data-duration; one long take sliced via
+      data-media-start. Videos omit data-duration so ffprobe fills natural
+      remaining length; parseSubCompositions clamps composition.videos to each
+      3s slot; unpatched probeStage extends end back to the natural window.
 
-      Compile injects data-hf-auto-start → browser probe runs (visibility).
-      ffprobe fills natural remaining length in the DOM; parseSubCompositions
-      clamps composition.videos to each 3s slot; unpatched probeStage extends
-      end back to the natural window.
+      Root omits data-duration so duration comes from the GSAP timeline — that
+      is a normal HyperFrames pattern and is what launches the browser probe.
     -->
     <div
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="12"
       data-width="1920"
       data-height="1080"
     >
@@ -86,7 +83,8 @@
 
     <script>
       window.__timelines = window.__timelines || {};
-      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // 12s master length (4 × 3s scenes). Root has no data-duration on purpose.
+      window.__timelines["main"] = gsap.timeline({ paused: true }).to({}, { duration: 12 });
     </script>
   </body>
 </html>
