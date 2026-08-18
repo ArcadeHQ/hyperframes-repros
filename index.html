@@ -28,12 +28,15 @@
   </head>
   <body>
     <!--
-      Repro: four short scene slots reuse one 90s take at deep media-starts.
-      Videos omit data-duration so ffprobe fills natural remaining length in the
-      DOM; parseSubCompositions clamps composition.videos to each 3s slot;
-      unpatched probeStage extends end back to the natural window.
+      Repro shaped like Arcade wizard comps:
+      - nested scenes with stamped host data-duration
+      - one long take sliced via data-media-start
+      - bare in-scene <video> (no data-start, no data-duration)
 
-      force-probe has no data-duration so the browser probe runs.
+      Compile injects data-hf-auto-start → browser probe runs (visibility).
+      ffprobe fills natural remaining length in the DOM; parseSubCompositions
+      clamps composition.videos to each 3s slot; unpatched probeStage extends
+      end back to the natural window.
     -->
     <div
       id="root"
@@ -78,13 +81,6 @@
         data-duration="3"
         data-track-index="0"
         data-no-timeline
-      ></div>
-      <div
-        id="force-probe-host"
-        data-composition-id="force-probe"
-        data-composition-src="compositions/force-probe.html"
-        data-start="0"
-        data-track-index="9"
       ></div>
     </div>
 

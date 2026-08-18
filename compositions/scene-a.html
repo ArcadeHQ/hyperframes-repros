@@ -41,16 +41,13 @@
       data-no-timeline
     >
       <!--
-        No data-duration on <video>: ffprobe fills natural remaining source
-        length into the DOM. parseSubCompositions clamps composition.videos
-        to the 3s scene slot; unpatched probeStage then extends end back to
-        the natural window.
+        Bare video (no data-start / data-duration): compile injects
+        data-hf-auto-start (probe) and ffprobe fills natural remaining length.
       -->
       <video
         id="cut-a"
         class="clip"
         src="assets/long-take.mp4"
-        data-start="0"
         data-media-start="5"
         data-track-index="0"
         muted
