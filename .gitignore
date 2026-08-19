@@ -5,3 +5,5 @@ dist/
 out/
 *.mp4.proxy.*
 .DS_Store
+renders/
+.thumbnails/

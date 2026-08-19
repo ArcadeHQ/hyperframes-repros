@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #1a0a2a;
+      }
+      video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #000;
+      }
+      .label {
+        position: absolute;
+        top: 48px;
+        left: 48px;
+        z-index: 2;
+        padding: 12px 20px;
+        font: 700 36px/1.2 system-ui, sans-serif;
+        color: #fff;
+        background: rgba(120, 40, 160, 0.85);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="scene-b"
+      data-composition-id="scene-b"
+      data-width="1920"
+      data-height="1080"
+      data-duration="3"
+      data-no-timeline
+    >
+      <!-- Same id as scene-a — intentional collision after inline. -->
+      <video
+        id="clip"
+        class="clip"
+        src="assets/long-take.mp4"
+        data-start="0"
+        data-duration="3"
+        data-media-start="50"
+        data-track-index="0"
+        muted
+        playsinline
+      ></video>
+      <div class="label">scene-b · id=clip · media-start 50s</div>
+    </div>
+  </body>
+</html>
