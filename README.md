@@ -46,3 +46,25 @@ Discovering video visibility windows... { videoCount: 5 }
 Time from that log to the five `[Probe] Runtime video discovery: clip-N visible …` lines.
 
 Control: keep only `clip-0` (drop the other four videos). `videoCount: 1`. Unpatched probe should drop ~5×. Patched, both counts finish in about the same time.
+
+### Cloud Run (Plan wall time)
+
+Laptop Metal finishes the scan too fast to sell the hang. Against a stock `hyperframes cloudrun deploy` of **unpatched** 0.8.3 (SwiftShader), compare `Plan.DurationMs` for this fixture vs the 1-video control (or vs a build that includes the single-pass scrub).
+
+```bash
+# needs ~/.hyperframes/cloudrun-state.json from `hyperframes cloudrun deploy`
+npx -p hyperframes@0.8.3 -p @hyperframes/gcp-cloud-run@0.8.3 \
+  hyperframes cloudrun render . --width 1920 --height 1080 --fps 24 --quality draft --wait
+```
+
+`--wait --json` does **not** print per-step ms. After the run succeeds, read Plan duration from the workflow execution result:
+
+```bash
+# EXECUTION_ID from the progress / Cloud Console executions list
+gcloud workflows executions describe EXECUTION_ID \
+  --workflow=WORKFLOW_ID --location=REGION --project=PROJECT_ID \
+  --format='value(result)' \
+  | python3 -c 'import json,sys; print(json.load(sys.stdin)["Plan"]["DurationMs"])'
+```
+
+`Plan.DurationMs` is the whole plan stage (compile + browser + probe). The visibility scan is the part that scales with `V`; a 1-video control on the same image isolates that. Color clips still understate per-seek cost — real 1080p footage makes the same seek count much slower.
