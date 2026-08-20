@@ -11,49 +11,163 @@
         box-sizing: border-box;
       }
       html,
-      body {
-        margin: 0;
+      body,
+      #root {
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        background: #000;
+        background: #111;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #root {
+        position: relative;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      .scene {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background: #16161c;
+      }
+      video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.55;
+      }
+      .card,
+      .kicker,
+      .headline,
+      .rule {
+        position: absolute;
+        color: #f4f5f7;
+        font-family: system-ui, sans-serif;
+        will-change: transform, filter, opacity;
+      }
+      .kicker {
+        top: 96px;
+        left: 96px;
+        font: 600 28px/1.2 system-ui, sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .headline {
+        top: 160px;
+        left: 96px;
+        width: 1100px;
+        font: 800 72px/1.05 system-ui, sans-serif;
+      }
+      .rule {
+        top: 420px;
+        left: 96px;
+        width: 240px;
+        height: 6px;
+        background: #7c5cfc;
+      }
+      .card {
+        width: 420px;
+        height: 220px;
+        padding: 28px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        font: 600 28px/1.3 system-ui, sans-serif;
       }
     </style>
   </head>
   <body>
+    <!--
+      31 scenes, 364s, 5 videos with no data-start (compiler injects
+      data-hf-auto-start). Nested scene timelines stitched onto the root.
+      Probe seeks that root at 0.1s; unpatched does it once per video.
+      Do not add data-start on <video>.
+    -->
     <div
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="364"
       data-width="1920"
       data-height="1080"
-    >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
-    </div>
-
+    ></div>
     <script>
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+      const SCENE_COUNT = 31;
+      const DURATION = 364;
+      const SLOT = DURATION / SCENE_COUNT;
+      const VIDEO_SCENES = [0, 7, 14, 21, 28];
+      const rootEl = document.getElementById("root");
+      const root = gsap.timeline({ paused: true });
+
+      for (let i = 0; i < SCENE_COUNT; i++) {
+        const scene = document.createElement("div");
+        scene.className = "scene";
+        scene.id = "scene-" + i;
+
+        if (VIDEO_SCENES.includes(i)) {
+          const video = document.createElement("video");
+          video.id = "clip-" + VIDEO_SCENES.indexOf(i);
+          video.className = "clip";
+          video.src = "assets/clip-" + (VIDEO_SCENES.indexOf(i) % 6) + ".mp4";
+          video.muted = true;
+          video.playsInline = true;
+          scene.appendChild(video);
+        }
+
+        const kicker = document.createElement("div");
+        kicker.className = "kicker";
+        kicker.textContent = "Segment " + String(i + 1).padStart(2, "0");
+        const headline = document.createElement("div");
+        headline.className = "headline";
+        headline.textContent = "Synthetic motion weight " + i;
+        const rule = document.createElement("div");
+        rule.className = "rule";
+        scene.append(kicker, headline, rule);
+
+        for (let c = 0; c < 3; c++) {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.textContent = "Card " + (c + 1);
+          card.style.left = 96 + c * 460 + "px";
+          card.style.top = "520px";
+          scene.appendChild(card);
+        }
+        rootEl.appendChild(scene);
+
+        const sceneTl = gsap.timeline();
+        const nodes = scene.querySelectorAll(".kicker, .headline, .rule, .card");
+        nodes.forEach((el, n) => {
+          sceneTl.fromTo(
+            el,
+            { x: -120 + n * 12, y: 24, scale: 0.92, opacity: 0, filter: "blur(14px)" },
+            {
+              x: 0,
+              y: 0,
+              scale: 1,
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: 0.7,
+              ease: "power3.out",
+            },
+            0.08 * n,
+          );
+          sceneTl.to(
+            el,
+            {
+              x: 80,
+              opacity: 0,
+              filter: "blur(10px)",
+              duration: 0.45,
+              ease: "power2.in",
+            },
+            SLOT - 0.55,
+          );
+        });
+        sceneTl.fromTo(scene, { opacity: 0 }, { opacity: 1, duration: 0.12 }, 0);
+        sceneTl.to(scene, { opacity: 0, duration: 0.12 }, SLOT - 0.12);
+        root.add(sceneTl, i * SLOT);
+      }
+
+      window.__timelines["main"] = root;
     </script>
   </body>
 </html>
