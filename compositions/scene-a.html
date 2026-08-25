@@ -1,0 +1,92 @@
+<template>
+  <div data-composition-id="scene-a" data-width="1920" data-height="1080" data-duration="2">
+    <style>
+      .stage {
+        width: 1920px;
+        height: 1080px;
+        background: #111;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+        padding: 60px;
+        box-sizing: border-box;
+      }
+      .title {
+        font-size: 52px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .sub {
+        font-size: 26px;
+        opacity: 0.65;
+        margin-bottom: 40px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        margin-bottom: 28px;
+      }
+      .tag {
+        font-size: 24px;
+        width: 560px;
+      }
+      .css-filter {
+        width: 320px;
+        height: 64px;
+        background: #000;
+        filter: url(#fx);
+      }
+      .control {
+        width: 320px;
+        height: 64px;
+        background: #e02424;
+      }
+    </style>
+
+    <div class="stage">
+      <div class="title">scene-a — everything below must be RED</div>
+      <div class="sub">Each scene defines its own #clip, #fx and #shape.</div>
+
+      <div class="row">
+        <div class="tag">1. control (no id reference)</div>
+        <div class="control"></div>
+      </div>
+
+      <div class="row">
+        <div class="tag">2. attribute clip-path="url(#clip)"</div>
+        <svg width="320" height="64" viewBox="0 0 320 64">
+          <defs>
+            <clipPath id="clip"><rect x="0" y="0" width="320" height="64" /></clipPath>
+          </defs>
+          <g clip-path="url(#clip)"><rect x="0" y="0" width="320" height="64" fill="#e02424" /></g>
+        </svg>
+      </div>
+
+      <div class="row">
+        <div class="tag">3. &lt;use href="#shape"&gt;</div>
+        <svg width="320" height="64" viewBox="0 0 320 64">
+          <defs>
+            <rect id="shape" x="0" y="0" width="320" height="64" fill="#e02424" />
+          </defs>
+          <use href="#shape" />
+        </svg>
+      </div>
+
+      <div class="row">
+        <div class="tag">4. CSS value filter: url(#fx)</div>
+        <svg width="0" height="0" style="position: absolute">
+          <filter id="fx">
+            <feFlood flood-color="#e02424" />
+            <feComposite in2="SourceGraphic" operator="in" />
+          </filter>
+        </svg>
+        <div class="css-filter"></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["scene-a"] = gsap.timeline({ paused: true });
+    </script>
+  </div>
+</template>

@@ -18,13 +18,15 @@
         overflow: hidden;
         background: #000;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      .clip {
+        position: absolute;
+        inset: 0;
       }
     </style>
   </head>
@@ -33,26 +35,34 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="4"
       data-width="1920"
       data-height="1080"
     >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <div
+        id="scene-a"
+        class="clip"
+        data-composition-id="scene-a"
+        data-composition-src="compositions/scene-a.html"
+        data-start="0"
+        data-duration="2"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-b"
+        class="clip"
+        data-composition-id="scene-b"
+        data-composition-src="compositions/scene-b.html"
+        data-start="2"
+        data-duration="2"
+        data-track-index="0"
+      ></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
+      tl.to({}, { duration: 4 }, 0);
       window.__timelines["main"] = tl;
     </script>
   </body>
