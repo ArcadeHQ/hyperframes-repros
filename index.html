@@ -16,43 +16,94 @@
         width: 1920px;
         height: 1080px;
         overflow: hidden;
+        background: #111;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      video {
+        position: absolute;
+        top: 0;
+        height: 1080px;
+        width: 960px;
+        object-fit: cover;
         background: #000;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #control {
+        left: 0;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      #source-only {
+        left: 960px;
+      }
+      .label {
+        position: absolute;
+        top: 48px;
+        z-index: 2;
+        padding: 12px 20px;
+        font: 700 36px/1.2 system-ui, sans-serif;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.75);
+      }
+      #label-control {
+        left: 48px;
+      }
+      #label-source {
+        left: 1008px;
       }
     </style>
   </head>
   <body>
+    <!--
+      Same 2s clip twice. Magenta 0–1s, cyan 1–2s, 440 Hz tone.
+
+      Left: parent src (control). Right: <source> only — legal HTML, no parent src.
+
+      Preview plays both. Render extracts only parent-src, so the right pane
+      is never injected (black here; sometimes a frozen first frame) and the
+      mix has no audio (control is muted).
+
+      Pin: hyperframes@0.8.14 (package.json).
+    -->
     <div
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="2"
       data-width="1920"
       data-height="1080"
     >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <video
+        id="control"
+        class="clip"
+        src="assets/clip.mp4"
+        data-start="0"
+        data-duration="2"
+        data-track-index="0"
+        muted
+        playsinline
+      ></video>
+      <video
+        id="source-only"
+        class="clip"
+        data-start="0"
+        data-duration="2"
+        data-track-index="1"
+        data-has-audio="true"
+        playsinline
+      >
+        <source src="assets/clip.mp4" type="video/mp4" />
+      </video>
+      <div id="label-control" class="label">parent src</div>
+      <div id="label-source" class="label">&lt;source&gt; only</div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
+      tl.to({}, { duration: 2 }, 0);
       window.__timelines["main"] = tl;
     </script>
   </body>
