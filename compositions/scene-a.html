@@ -1,0 +1,52 @@
+<template>
+  <div data-hf-id="hf-hz5m" data-composition-id="scene-a" data-width="1280" data-height="720">
+    <style>
+      .scene-a {
+        width: 100%;
+        height: 100%;
+        background: #1b3a4b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+      .scene-a h1 { font-size: 48px; }
+      .scene-a .frame {
+        width: 960px;
+        height: 480px;
+        background: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .scene-a video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+
+    <div data-hf-id="hf-g3mu" class="scene-a">
+      <h1 data-hf-id="hf-3wsp" id="title-a">Scene A — expects footage from 10s</h1>
+      <div data-hf-id="hf-d9wv" class="frame">
+        <video data-hf-id="hf-71q1" id="clip" src="" muted playsinline data-media-start="10"></video>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        // Source URL is decided at runtime, mirroring settings-driven media.
+        document.querySelector('#clip').src =
+          'assets/clip.mp4';
+
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo('#title-a', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0);
+        tl.to('#title-a', { opacity: 1, duration: 0.1 }, 3.9);
+        window.__timelines['scene-a'] = tl;
+      })();
+    </script>
+  </div>
+</template>
