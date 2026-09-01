@@ -1,0 +1,24 @@
+<template>
+  <div data-composition-id="scene-bad" data-width="1920" data-height="1080" data-duration="2">
+    <style>
+      .stage {
+        width: 100%;
+        height: 100%;
+        background: #b91c1c;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 96px;
+        font-weight: 700;
+        transform: xPercent: -10;
+      }
+    </style>
+    <div class="stage">BROKEN</div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["scene-bad"] = gsap.timeline({ paused: true });
+    </script>
+  </div>
+</template>

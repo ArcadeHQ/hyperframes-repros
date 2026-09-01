@@ -18,13 +18,24 @@
         overflow: hidden;
         background: #000;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      .clip {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        overflow: hidden;
+      }
+      #scene-ok {
+        left: 0;
+      }
+      #scene-bad {
+        left: 50%;
       }
     </style>
   </head>
@@ -33,26 +44,34 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
+      data-duration="2"
       data-width="1920"
       data-height="1080"
     >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <div
+        id="scene-ok"
+        class="clip"
+        data-composition-id="scene-ok"
+        data-composition-src="compositions/scene-ok.html"
+        data-start="0"
+        data-duration="2"
+        data-track-index="0"
+      ></div>
+      <div
+        id="scene-bad"
+        class="clip"
+        data-composition-id="scene-bad"
+        data-composition-src="compositions/scene-bad.html"
+        data-start="0"
+        data-duration="2"
+        data-track-index="1"
+      ></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
+      tl.to({}, { duration: 2 }, 0);
       window.__timelines["main"] = tl;
     </script>
   </body>
