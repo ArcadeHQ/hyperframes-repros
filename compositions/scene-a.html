@@ -1,0 +1,22 @@
+<template>
+  <div data-composition-id="scene-a" data-width="640" data-height="360">
+    <style>
+      .scene-a { width: 100%; height: 100%; background: #1fa2a2; position: relative; }
+      .scene-a .label { position: absolute; left: 24px; bottom: 24px; color: #fff; font: 700 28px/1.2 system-ui, sans-serif; }
+      .scene-a .tail { position: absolute; inset: 0; background: #e100e1; color: #fff; font: 700 40px/1.2 system-ui, sans-serif; padding: 40px; }
+    </style>
+
+    <div class="scene-a clip" data-start="0" data-duration="4">
+      <!-- Silent until 1.5s, then a 440 Hz tone to 4s. -->
+      <audio id="scene-a-sound" src="assets/tone-4s.m4a" data-start="0" data-duration="4"></audio>
+      <div class="label clip" data-start="0" data-duration="4">Scene A (4s of content in a 2s slot)</div>
+      <!-- Starts after the slot closes: must never be seen. -->
+      <div class="tail clip" data-start="2.5" data-duration="1.5">TAIL</div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["scene-a"] = gsap.timeline({ paused: true }).to({}, { duration: 4 });
+    </script>
+  </div>
+</template>

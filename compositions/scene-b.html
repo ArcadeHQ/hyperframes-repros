@@ -1,0 +1,17 @@
+<template>
+  <div data-composition-id="scene-b" data-width="640" data-height="360">
+    <style>
+      .scene-b { width: 100%; height: 100%; background: #2979ff; position: relative; }
+      .scene-b .label { position: absolute; left: 24px; bottom: 24px; color: #fff; font: 700 28px/1.2 system-ui, sans-serif; }
+    </style>
+
+    <div class="scene-b clip" data-start="0" data-duration="2">
+      <div class="label clip" data-start="0" data-duration="2">Scene B (should be silent)</div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["scene-b"] = gsap.timeline({ paused: true }).to({}, { duration: 2 });
+    </script>
+  </div>
+</template>

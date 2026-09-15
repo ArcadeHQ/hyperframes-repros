@@ -1,7 +1,3 @@
-node_modules/
-.hyperframes/
-.debug/
-dist/
 out/
-*.mp4.proxy.*
-.DS_Store
+renders/
+node_modules/

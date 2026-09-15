@@ -2,30 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta name="viewport" content="width=640, height=360" />
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #000;
-      }
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 640px; height: 360px; overflow: hidden; background: #000; }
     </style>
   </head>
   <body>
@@ -33,27 +14,32 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
+      data-duration="4"
+      data-width="640"
+      data-height="360"
     >
-      
-      
-
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <!-- The slot shows only the first 2s of a 4s scene. -->
+      <div
+        id="scene-a"
+        data-composition-id="scene-a"
+        data-composition-src="compositions/scene-a.html"
+        data-start="0"
+        data-duration="2"
+        data-track-index="1"
+      ></div>
+      <div
+        id="scene-b"
+        data-composition-id="scene-b"
+        data-composition-src="compositions/scene-b.html"
+        data-start="2"
+        data-duration="2"
+        data-track-index="1"
+      ></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+      window.__timelines["main"] = gsap.timeline({ paused: true });
     </script>
   </body>
 </html>
