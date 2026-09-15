@@ -1,8 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * {
@@ -16,43 +16,46 @@
         width: 1920px;
         height: 1080px;
         overflow: hidden;
-        background: #000;
+        background: #111;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #clip {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        object-fit: cover;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      #label {
+        position: absolute;
+        left: 80px;
+        top: 80px;
+        width: 320px;
+        height: 24px;
+        background: #fff;
       }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      
-      
-
+    <div data-hf-id="hf-4nyc" id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
       <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
+        assets/rose-yellow-2s.mp4 is a 2 s clip: rose (#de1e45) for the first
+        second, yellow (#f7cd13) for the second. The slot is 6 s and the media
+        start is 5 s, past the end of the file.
+
+        Preview holds the clip's last frame (yellow) for the whole slot.
+        Render refuses the source: media_start_out_of_range.
+
+        Pin: hyperframes@0.8.40 (package.json).
       -->
+      <video data-hf-id="hf-4gkj" id="clip" class="clip" src="assets/rose-yellow-2s.mp4" data-start="0" data-duration="6" data-media-start="5" muted playsinline></video>
+      <!-- Moves for the whole 6 s so check's layout sweep sees the timeline advance. -->
+      <div data-hf-id="hf-4bvk" id="label" class="clip" data-start="0" data-duration="6"></div>
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
+      tl.to("#label", { x: 400, duration: 6, ease: "none" }, 0);
       window.__timelines["main"] = tl;
     </script>
   </body>
