@@ -5,3 +5,4 @@ dist/
 out/
 *.mp4.proxy.*
 .DS_Store
+repro/certs/
