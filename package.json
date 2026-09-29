@@ -3,9 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.8.3 preview",
-    "check": "npx --yes hyperframes@0.8.3 check",
-    "render": "npx --yes hyperframes@0.8.3 render",
-    "publish": "npx --yes hyperframes@0.8.3 publish"
+    "dev": "npx --yes hyperframes@0.8.92 preview",
+    "check": "npx --yes hyperframes@0.8.92 check",
+    "render": "npx --yes hyperframes@0.8.92 render",
+    "render:distributed": "node distributed-render.mjs",
+    "publish": "npx --yes hyperframes@0.8.92 publish"
+  },
+  "dependencies": {
+    "@hyperframes/producer": "0.8.92"
   }
 }
