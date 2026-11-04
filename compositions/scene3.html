@@ -1,0 +1,33 @@
+<template>
+  <style>
+    #scene3-root {
+      position: absolute;
+      inset: 0;
+      background: #322;
+    }
+    #scene3-box {
+      position: absolute;
+      left: 120px;
+      top: 120px;
+      width: 600px;
+      height: 300px;
+      background: #fc0;
+    }
+  </style>
+  <div id="scene3-root" data-composition-id="scene3" data-width="1920" data-height="1080">
+    <div id="scene3-box"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // The yellow box shows from the scene start and cuts out 1.5s in.
+    // Its first tween is a deferred autoAlpha cut.
+    tl.fromTo(
+      "#scene3-box",
+      { autoAlpha: 1 },
+      { autoAlpha: 0, duration: 0.01, immediateRender: false },
+      1.5,
+    );
+    tl.to({}, { duration: 3 }, 0);
+    window.__timelines["scene3"] = tl;
+  </script>
+</template>
