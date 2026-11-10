@@ -1,0 +1,31 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"clip","type":"string","label":"Clip","default":"assets/blue-default.mp4"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div data-composition-id="scene" data-start="0" data-duration="3" data-width="640" data-height="360">
+      <video
+        id="clip"
+        class="clip"
+        data-start="0"
+        data-duration="3"
+        data-track-index="1"
+        data-var-src="clip"
+        src="../assets/red-authored.mp4"
+        muted
+        playsinline
+      ></video>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["scene"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>
